@@ -54,27 +54,51 @@ void Connection::send(PlayerDataMsg* msg)
     std::cout << "Player Y: " << msg->y << '\n';
 }
 
-PlayerDataMsg Connection::receive()
+PlayerDataMsg Connection::receivePlayerData()
 {
 	//playerData.push(msg);
     PlayerDataMsg msgRecv;
 
     //tcpSocket.setBlocking(false);
 
-    std::cout << "About to recv\n";
+    std::cout << "About to recv player 2 data\n";
 
 	if (tcpSocket.receive(&msgRecv, sizeof(PlayerDataMsg), received) != sf::Socket::Done)
 	{
-		std::cout << "Client side error receiving using TCP!\n";
+		std::cout << "Client side error receiving Player Date using TCP!\n";
         return msgRecv;
 	}
 
     std::cout << "Client side received echo: " << received << " bytes\n";
 
-    std::cout << "Player ID: " << msgRecv.playerID << '\n';
-    std::cout << "Msg time sent: " << msgRecv.timeSent << '\n';
-    std::cout << "Player X: " << msgRecv.x << '\n';
-    std::cout << "Player Y: " << msgRecv.y << '\n';
+    std::cout << "Player ID: " << msgRecv.playerID << '\n'
+              << "Msg time sent: " << msgRecv.timeSent << '\n'
+              << "Player X: " << msgRecv.x << '\n'
+              << "Player Y: " << msgRecv.y << '\n';
 
     return msgRecv;
+}
+
+GameWorldData Connection::receiveGameWorldData()
+{
+    GameWorldData gameDataRecv;
+
+    //tcpSocket.setBlocking(false);
+
+    std::cout << "About to recv game world data\n";
+
+    if (tcpSocket.receive(&gameDataRecv, sizeof(GameWorldData), received) != sf::Socket::Done)
+    {
+        std::cout << "Client side error receiving Game World Data using TCP!\n";
+        return gameDataRecv;
+    }
+
+    std::cout << "Client side received game world data: " << received << " bytes\n";
+
+    std::cout << "Asteroid ID: " << gameDataRecv.asteroidID << '\n'
+              << "Msg time sent: " << gameDataRecv.timeSent << '\n'
+              << "Asteroid X: " << gameDataRecv.x << '\n'
+              << "Asteroid Y: " << gameDataRecv.y << '\n';
+
+    return gameDataRecv;
 }

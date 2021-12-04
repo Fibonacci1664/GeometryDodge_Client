@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "GameWorldData.h"
 
 class Asteroid
 {
@@ -7,7 +8,7 @@ public:
 	Asteroid(sf::RenderWindow* hwnd);
 	~Asteroid();
 
-	void update(float dt);
+	void update(float dt, GameWorldData gwd);
 	void render(sf::RenderWindow* window);
 	sf::Sprite* getAsteroidSprite();
 	sf::FloatRect getCollisionBox();
@@ -27,7 +28,7 @@ private:
 	sf::Vector2u size;
 	sf::FloatRect collisionBox;
 
-	float randSpeed;		// Add this later if the MVP works
+	float speed;
 	int randXPos;
 	int randYPos;
 };

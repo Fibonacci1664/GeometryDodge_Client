@@ -150,24 +150,30 @@ void Level::handleInput(float dt)
 void Level::update(float dt)
 {
 	totalGameTime += dt;
+	//networkUpdateTimer += dt;
 
 	ui->update(dt);
 
-	// Do network update, for player 1 this means sending own data for client 2 to use
-	player1->networkUpdate(dt, 1);
+	std::vector<GameWorldData> gameWorldData;
+
+	// Do network update, for player 1 this means sending own data to server for client 2 to use(player 2 functionality not built yet)
+	//player1->networkUpdate(dt, 1);
+	gameWorldData.push_back(player1->networkUpdate(dt, 1));
+	//networkUpdateTimer = 0.0f;
+
 
 	// Update actual player with local input information and game world data received from the network
 	player1->localUpdate(dt);
 
 	// If player 2 exists update them
-	if (player2)
-	{
-		// Do network update, for player 2 this means recv positinal data of other player and game world data
-		PlayerDataMsg msg2 = player2->receiveOtherPlayerData();
+	//if (player2)
+	//{
+	//	// Do network update, for player 2 this means recv positinal data of other player
+	//	PlayerDataMsg msg2 = player2->receiveOtherPlayerData();
 
-		// Update player 2 sprite with positional data received from server and game world data
-		player2->opponentUpdate(dt, msg2);
-	}
+	//	// Update player 2 sprite with positional data received from server and game world data
+	//	player2->opponentUpdate(dt, msg2);
+	//}
 	
 	if (isDebugMode)
 	{
@@ -191,12 +197,16 @@ void Level::update(float dt)
 	// Will also need a struct containing data for the world objects, asteroid, UI counters etc.
 	// i.e WorldDataMsg worldMsg, then we use this data to update the local asteroid and game timers
 
-	// Update all the asteroids
-	for (int i = 0; i < asteroids.size(); i++)
+	// If game world data exists, i.e. if we have carried out a network update
+	if (!gameWorldData.empty())
 	{
-		asteroids[i]->update(dt);
+		// Update all the asteroids using the gameWorld data from the network update above
+		for (int i = 0; i < asteroids.size(); i++)
+		{
+			asteroids[i]->update(dt, gameWorldData[i]);
+		}
 	}
-
+	
 	//checkCollisions();
 }
 

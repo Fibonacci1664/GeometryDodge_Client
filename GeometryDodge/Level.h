@@ -46,4 +46,5 @@ private:
 	int currentWave;
 	bool isDebugMode;
 	float totalGameTime;
+	float networkUpdateTimer = 0.0f;
 };

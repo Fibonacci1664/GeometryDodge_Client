@@ -37,9 +37,10 @@ void Player::handleInput(float dt)
 	normY = input->getLeftStick().y / 100.0f;
 }
 
-void Player::networkUpdate(float dt, int playerID)
+GameWorldData Player::networkUpdate(float dt, int playerID)
 {
 	sendPlayerData(dt, playerID);
+	return recieveWorldData();
 }
 
 void Player::sendPlayerData(float dt, int playerID)
@@ -59,9 +60,11 @@ void Player::sendPlayerData(float dt, int playerID)
 	}
 }
 
-void Player::recieveWorldData()
+GameWorldData Player::recieveWorldData()
 {
+	GameWorldData gameDataMsg = conn->receiveGameWorldData();
 
+	return gameDataMsg;
 }
 
 PlayerDataMsg Player::receiveOtherPlayerData()
@@ -69,7 +72,7 @@ PlayerDataMsg Player::receiveOtherPlayerData()
 	PlayerDataMsg msg;
 
 	// All data being received will be game world data and opposite player data
-	msg = conn->receive();
+	msg = conn->receivePlayerData();
 
 	return msg;
 }

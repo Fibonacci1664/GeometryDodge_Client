@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "Connection.h"
 #include "PlayerDataMsg.h"
+#include "GameWorldData.h"
 
 class Player
 {
@@ -13,11 +14,11 @@ public:
 
 	void connect(int playerNumber);
 	void handleInput(float dt);
-	void networkUpdate(float dt, int playerID);
+	GameWorldData networkUpdate(float dt, int playerID);
 	void localUpdate(float dt);
 	void opponentUpdate(float dt, PlayerDataMsg msg);
 	void sendPlayerData(float dt, int playerID);
-	void recieveWorldData();
+	GameWorldData recieveWorldData();
 	PlayerDataMsg receiveOtherPlayerData();
 	
 	sf::Sprite* getPlayerSprite();
